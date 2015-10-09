@@ -9,5 +9,5 @@ compile: restart
 	pdflatex main.tex
 	pdflatex main.tex
 
-clean: restart compile
+clean: restart
 	rm -f *.bbl *.log *.lot *.toc *.out *.blg *.aux *.txt
