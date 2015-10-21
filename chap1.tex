@@ -1,53 +1,46 @@
-\chapter{Introduzione}
-\label{Introduzione}
-\thispagestyle{empty}
+\chapter{Introduction}
+\label{Introduction}
 
-\begin{quotation}
-{\footnotesize
-\noindent{\emph{``Terence: Rotta a nord con circospezione \\
-Bud: Ehi, gli ordini li do io qui!\\
-Terence: Ok, comante\\
-Bud: Rotta a nord\\
-Terence: Soltanto?\\
-Bud: Con circospezione!''}
+This document describes SPF2 (Social Proximity Framework 2), the new major release of the software written for the master thesis available at http://hdl.handle.net/10589/106727. Before you could understand this document you should really read the first one.
+
+The main objectives of this second major release are:
+\begin{itemize}
+	\item update the entire project to Android Studio and Gradle;
+	\item split the 3 demo applications in different projects;
+	\item put SPFShared and SPFLib into a Maven repository to be able to import in all project what you want to create SPF's applications;
+	\item update all GUIs to Material Design and in particular using the necessary support library by Google
+	\item completely remove AllJoyn/AllSeen middleware and replace it with a pure and complete Wi-Fi Direct middleware
+	\item improve Wi-Fi Direct Middleware's architecture and sourcecode improving the reliability
+	\item support Wi-Fi Direct groups made by 2 or more devices
+\end{itemize}
+
+All projects are available on GitHub licensed under LGPLv3 and I also included Travis Continuous Integration to auto compile the source code at every \textsf{git push} command, in particular to check the different releases.
+The official repositories are:
+\begin{enumerate}
+	\item https://github.com/deib-polimi/SPF2
+	\item https://github.com/deib-polimi/SPF2CouponingProviderDemo
+	\item https://github.com/deib-polimi/SPF2CouponingClientDemo
+	\item https://github.com/deib-polimi/SPF2ChatDemo
+\end{enumerate}
+The first one is the main project, with also SPFShared and SPFLib. In this project all sub-modules are connected using normal gradle module's dependency.
+I.e. there is a settings.gradle file where are declared all submodules and
+in every local module's build.gradle are specified the dependency from other sub module.
+For example, this is the settings.gradle
+include ':sPFShared'
+include ':sPFFramework'
+include ':sPFWFDMid'
+include ':sPFLib'
+include ':sPFApp'
+
+and this one is the build.gradle in sPFFramework sub module:
+dependencies {
+    compile project(':sPFShared')
+    compile 'com.google.code.gson:gson:2.4'
+    compile 'com.android.support:support-v4:23.1.0'
+    provided 'org.projectlombok:lombok:1.16.6'
 }
-\begin{flushright}
-Chi Trova un Amico Trova un Tesoro
-\end{flushright}
-}
-\end{quotation}
-\vspace{0.5cm}
 
-\noindent L'introduzione deve essere atomica, quindi non deve contenere n\`e sottosezioni n\`e paragrafi n\`e altro. Il titolo, il sommario e l'introduzione devono sembrare delle scatole cinesi, nel senso che lette in quest'ordine devono progressivamente svelare informazioni sul contenuto per incatenare l'attenzione del lettore e indurlo a leggere l'opera fino in fondo. L'introduzione deve essere tripartita, non graficamente ma logicamente:
+As you can see there are local module's dependencies like gson and support-v4, a provided dependency like lombok  and finally the dependency of sPFShared module, not online like the others, but local into the Android Studio Project. In fact, all the dependencies in SPFApp are local because it's the place where you can develop their. In external apps, like SPFCouponing and SPFChat, all dependencies are remote, using the deployed version of SPFShared and SPFLibs. This is the correct way to manege dependencies for SPF.
+A very big improvement should be the total separation of SPFApp from sPFFramework and all other sub modules. But this is another topics and i will show more details and hints at the end of this document, because should be the main objective for the next major release.
 
-\section{Inquadramento generale}
-La prima parte contiene una frase che spiega l'area generale dove si svolge il lavoro; una che spiega la sottoarea pi\`u specifica dove si svolge il lavoro e la terza, che dovrebbe cominciare con le seguenti parole ``lo scopo della tesi \`e \dots'', illustra l'obbiettivo del lavoro. Poi vi devono essere una o due frasi che contengano una breve spiegazione di cosa e come \`e stato fatto, delle attivit\`a  sperimentali, dei risultati ottenuti con una valutazione e degli sviluppi futuri. La prima parte deve essere circa una facciata e mezza o due
 
-\section{Breve descrizione del lavoro}
-La seconda parte deve essere una esplosione della prima e deve quindi mostrare in maniera pi\`u esplicita l'area dove si svolge il lavoro, le fonti bibliografiche pi\`u importanti su cui si fonda il lavoro in maniera sintetica (una pagina) evidenziando i lavori in letteratura che presentano attinenza con il lavoro affrontato in modo da mostrare da dove e perch\'e \`e sorta la tematica di studio. Poi si mostrano esplicitamente le realizzazioni, le direttive future di ricerca, quali sono i problemi aperti e quali quelli affrontati e si ripete lo scopo della tesi. Questa parte deve essere piena (ma non grondante come la sezione due) di citazioni bibliografiche e deve essere lunga circa 4 facciate.
-
-\section{Struttura della tesi}
-La terza parte contiene la descrizione della struttura della tesi ed \`e organizzata nel modo seguente.
-``La tesi \`e strutturata nel modo seguente.
-
-Nella sezione due si mostra \dots
-
-Nella sez. tre si illustra \dots
-
-Nella sez. quattro si descrive \dots
-
-Nelle conclusioni si riassumono gli scopi, le valutazioni di questi e le prospettive future \dots
-
-Nell'appendice A si riporta \dots (Dopo ogni sezione o appendice ci vuole un punto).''
-
-I titoli delle sezioni da 2 a M-1 sono indicativi, ma bisogna cercare di mantenere un significato equipollente nel caso si vogliano cambiare. Queste sezioni possono contenere eventuali sottosezioni.
-
-%``Terence: "Mi fai un gelato anche a me? Lo vorrei di pistacchio" \\
-%Bud: "Non ce l'ho il pistacchio. C'ho la vaniglia, cioccolato, fragola, limone e caffé"\\
-%Terence: "Ah bene. Allora fammi un cono di vaniglia e di pistacchio"\\
-%Bud: "No, non ce l'ho il pistacchio. C'ho la vaniglia, cioccolato, fragola, limone e caffé"\\
-%Terence: "Ah, va bene. Allora vediamo un po', fammelo al cioccolato, tutto coperto di pistacchio"\\
-%Bud: "Ehi, macché sei sordo? Ti ho detto che il pistacchio non ce l'ho!"\\
-%Terence: "Ok ok, non c'è bisogno che t'arrabbi, no? Insomma, di che ce l'hai?"\\
-%Bud: "Ce l'ho di vaniglia, cioccolato, fragola, limone e caffé!"\\
-%Terence: "Ah, ho capito. Allora fammene uno misto: mettici la fragola, il cioccolato, la vaniglia, il limone e il caffé. Charlie, mi raccomando il pistacchio, eh"''}
