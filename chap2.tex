@@ -107,17 +107,75 @@ All these operations written here are perfectly represented in Figure \ref{uml-p
 
 
 Now, I want to explain quickly the class structure of this middleware. Because there is a huge number of classes, I selected only a subset of these, as you can see in Figures \ref{uml-part1} and \ref{uml-part2}.
-I cannot and i don't want to explain in details all classes and methods, because it's impossibile. Also, i don't want to repeat the same thigs for GroupActor and its subclasses.
+I cannot and i don't want to explain in details all classes and methods, because it's impossibile. Also, i don't want to repeat the same things for GroupActor and its subclasses.
 In this subsection, i want to explain some key feature of this new implementation of WifiDirectMiddleware.java.
-In fact, there are some new important variable, like isAutonomous and goIntent. This variable are important because choose by the user form the UI. The first one is connected to the state of the switch ``Group Owner` and the second one to the switch ``Autonomous``. 
-I implemented a quick technique to achieve this by passing variabile during the creation of the Middleware and updating this value after every change to the switch states. Obviously, this is not a good and I'll explain why into the Section \ref{conclusion}.
+In fact, there are some new important variable, like isAutonomous and goIntent. These variables are important, because chosen by the user from the UI. The first one is connected to the state of the switch ``Group Owner` and the second one to the switch ``Autonomous``. 
+I implemented a quick workaround to achieve this, by passing variables during the creation of the Middleware and updating these values after every change to the switches states. Obviously, this is not good and I'll explain why into Section \ref{conclusion}.
 
 %%%%add dome other informations describing these two figures
 
 \section{Eternal Connect}
 
+Eternal Connect is a solution to restart discovery and connect after some network errors. This can be considered an improved version of the Eternal Discovery that I used here https://github.com/deib-polimi/PigeonMessanger, because with this latest implementation, SPF will re-connect automatically trying every 15 second for 4 times. Obviously, you can configure this to achieve the best configurations. Also, you can improve Eternal Connect in different ways to obtain also better performances during network creation, in particular on the Group Owner in Autonomous mode.
+All the code related to Eternal Connect is isolated into a single class called EternalConnect.java (instead of Pigeon Messenger, where the code was distributed in different classes).
+Eternal Connect has two different modes:
+\begin{enumerate}
+	\item standard: with automatic reconnection in a loop cycle for 4 times every 15 seconds;
+	\item simple: with a single automatic reconnection. If it fails, it will stop.
+\end{enumerate}
+These two modes are partially implemented, because I created only the necessary features. If you need a different behaviour you can simply modify \textsf{onEternalConnectUpdate} that catch EternalConnectEvent in WifiDirectMiddleware.java.
 
-\subsection*{State diagram}
+EternalConnect.java is a singleton class with these important public methods:
+\begin{itemize}
+	\item eternalConnect(): start the EternalConnect as you can see in Listing 	\ref{eternalConnect};
+	\item onNetwork Disconnected(): if a device isn't a GO in Autonomous mode restarts the Eternal Connect, instead posts an EternalConnectEvent to specify the ``simple reconnection`` mode;
+	\item onConnectFailed(): called when Wi-Fi Direct fails during the connection procedure, to restart the Eternal Connect in standard mode;
+	\item onGroupCreationFailed(): called when Wi-Fi Direct fails during the group creation procedure, to restart the Eternal Connect in simple mode;
+	\item eternalCompletedSuccessfully(): to complete the procedure, because the connection is established.
+\end{itemize}
+
+
+\begin{lstlisting}[caption={eternalConnect() method},label=eternalConnect, language=Java]
+void eternalConnect(boolean proximityKilledByUser) {
+	killScheduler();
+    scheduler = Executors.newScheduledThreadPool(1);
+    final Runnable runnable = new Runnable() {
+    	public void run() {
+        	if (proximityKilledByUser) {
+        		killScheduler();
+        		eternalCounter = 0;
+            return;
+        }	
+		if (eternalCounter > MAX_ETERNAL_COUNT) {
+        		killScheduler();
+            eternalCounter = 0;
+        } else {
+        	  //post EternalConnectEvent.NEW_EC_CYCLE
+            eternalCounter++;
+        }
+	}
+};
+
+final ScheduledFuture<?> eternalHandle =
+	scheduler.scheduleAtFixedRate(runnable, 
+		10, 15, TimeUnit.SECONDS);
+    scheduler.schedule(new Runnable() {
+    	public void run() {
+          eternalHandle.cancel(true);
+        }
+    }, 15, TimeUnit.SECONDS);
+}
+\end{lstlisting}
 
 
 \section{Wi-Fi Direct's known issues}
+
+In this section i want to create a list will some of the known issues of Wi-Fi Direct protocol.
+\begin{itemize}
+	\item There are random errors (for example: 0 - bs) when you are trying to establish a connection. In most of the cases, to fix this problem you must kill the Wi-Fi Connection manually.
+	\item The discovery procedure is absolutely unreliable. Sometime a device can't discover other devices without any reason and the only way to fix this problem is a stop followed by a restart of the discovery procedure.
+	\item Connection between different devices with different Android versions and manufacturers can be unstable.
+	\item The most important problem in SPF2 is related to autonomous group join operations. Because, if a device want to join to a previously created group should ask to the group owner of this group to join in. In Android API there isn't this concept (but in wpa\_supplicant yes, obviously), but there is the standard connect method. This is not a problem, instead the real problem is that in a device want to join shows a popup into the group owner. If the GO accept the join procedure can complete. This process can't be automated and always requires a user interaction. Also, for absolutely inexplicable reasons, when the connection with a third device starts, the entire group can be destroyed to try to recreate it quickly. This is a famous problem that you can found everywhere on stackoverflow and at the moment there aren't any solutions. If you want to use wpa\_supplicant from command line this problem never happens, this implies that is caused by the Android implementation of Wi-Fi Direct. Also, the main consequence related to this problem is that sometime the group won't be recreated, caused by fails during connection or discovery problem. To be able to create a group of three devices with SPF2 you should try some times to obtain the desired result. This is a huge pure Android's implementation issue.
+\end{itemize}
+
+
