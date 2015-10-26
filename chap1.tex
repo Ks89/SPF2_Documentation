@@ -3,30 +3,30 @@
 
 This document describes SPF2 (Social Proximity Framework 2), the new major release of the software written for the master thesis available at http://hdl.handle.net/10589/106727. Before you could understand this document you must really read the first one. This document will be more implementation-level then the master thesis and for this reason i won't repeat the theory behind SPF.
 
-The main objectives of this second major release are:
+\noindent The main objectives of this second major release are:
 \begin{itemize}
-	\item update the entire project to Android Studio and Gradle;
-	\item split the 3 demo applications in different projects;
-	\item put SPFShared and SPFLib into a Maven repository to be able to import in all project what you want to create SPF's applications;
-	\item update all GUIs to Material Design and in particular using the necessary support library by Google
-	\item officially support Android 6.0
-	\item completely remove AllJoyn/AllSeen middleware and replace it with a pure and complete Wi-Fi Direct middleware
-	\item improve Wi-Fi Direct Middleware's architecture and sourcecode improving the reliability
-	\item support Wi-Fi Direct groups made by 2 or more devices
+	\item update the entire project to Android Studio and Gradle.
+	\item split the 3 demo applications in different projects.
+	\item put \textsf{SPFShared} and \textsf{SPFLib} into a Maven repository to be able to import in all project what you want to create SPF's applications.
+	\item update all GUIs to Material Design and in particular using the necessary support library by Google.
+	\item officially support Android 6.0.
+	\item completely remove AllJoyn/AllSeen middleware and replace it with a pure and complete Wi-Fi Direct Middleware.
+	\item improve Wi-Fi Direct Middleware's architecture and sourcecode improving the reliability.
+	\item support Wi-Fi Direct groups made by 2 or more devices.
 \end{itemize}
 
-But why I chose this particular objectives? Because, I decided to:
+\noindent But why I chose these particular objectives? Because, I decided to:
 \begin{itemize}
-	\item To update the project to the news Android's IDE and its build tool, because Google decided to stops the development of ADT for Eclipse
-	\item To improve the separation of concepts and the related projects
-	\item To simplify the usage of SPF by app's developers
-	\item To simplify the future work from SPF developers to add other GUI elements and so on \dots In fact, updating all projects to support library will make easier to update SPF to newer Android versions and Themes.
-	\item To use the Wi-Fi Direct protocol, created exactly for mobile devices
-	\item To use my previous experiences working on Wi-Fi Direct to improve the stability and reliability of Wi-Fi Direct middleware
-	\item To support Wi-Fi Direct groups specifying from the UI which type of device will be after the Proximity service will be enabled
+	\item update the project to the news Android's IDE and its build tool, because Google decided to stops the development of ADT for Eclipse.
+	\item improve the separation of concepts and the related projects.
+	\item simplify the usage of SPF by app's developers.
+	\item simplify the future work of SPF developers, if they will want to add other GUI elements and so on \dots In fact, updating all projects to support libraries will make easier to update SPF to newer Android's versions and Themes.
+	\item use the Wi-Fi Direct protocol, created exactly for mobile devices.
+	\item use my previous experiences working on Wi-Fi Direct to improve the stability and reliability of Wi-Fi Direct middleware.
+	\item support Wi-Fi Direct groups specifying the device's type from the UI.
 \end{itemize}
 
-All projects are available on GitHub licensed under LGPLv3 and I also included Travis Continuous Integration to auto compile the source code at every \textsf{git push} command, in particular to check the different releases.
+All projects are available on GitHub, licensed under \emph{LGPLv3} and I also included \emph{Travis Continuous Integration} to auto-compile the source code at every \textsf{git push} command, in particular to build the different releases.
 The official repositories are:
 \begin{enumerate}
 	\item https://github.com/deib-polimi/SPF2
@@ -34,121 +34,114 @@ The official repositories are:
 	\item https://github.com/deib-polimi/SPF2CouponingClientDemo
 	\item https://github.com/deib-polimi/SPF2ChatDemo
 \end{enumerate}
-The first one is the main project, with also SPFShared and SPFLib. In this project all sub-modules are connected using normal gradle module's dependency.
-I.e. there is a settings.gradle file where are declared all submodules and
-in every local module's build.gradle are specified the dependency from other sub module.
-For example, this is the settings.gradle
+
+\begin{lstlisting}[caption={settings.gradle},label=lst:settingsgradle, language=Java]
 include ':sPFShared'
 include ':sPFFramework'
 include ':sPFWFDMid'
 include ':sPFLib'
 include ':sPFApp'
+\end{lstlisting}
 
-
-and this one is the build.gradle in sPFFramework sub module:
+\begin{lstlisting}[caption={build.gradle},label=lst:buildgradle, language=Java]
 dependencies {
-    compile \seqsplit{project(':sPFShared')}
-    compile \seqsplit{'com.google.code.gson:gson:2.4'}
-    compile \seqsplit{'com.android.support:support-v4:23.1.0'}
-    provided \seqsplit{'org.projectlombok:lombok:1.16.6'}
+ compile project(':sPFShared')
+ compile 'com.google.code.gson:gson:2.4'
+ compile 'com.android.support:support-v4:23.1.0'
+ provided 'org.projectlombok:lombok:1.16.6'
 }
+\end{lstlisting}
 
-As you can see there are local module's dependencies like gson and support-v4, a provided dependency like lombok and finally the dependency of sPFShared module, not online like the others, but local into the Android Studio Project. In fact, all the dependencies in SPFApp are local because it's the place where you can develop their. In external apps, like SPFCouponing and SPFChat, all dependencies are remote, using the deployed version of SPFShared and SPFLibs. This is the correct way to manege dependencies for SPF.
-A very big improvement should be the total separation of SPFApp from sPFFramework and all other sub modules. But this is another topics and i will show more details and hints at the end of this document, because should be the main objective for the next major release.
+The first one is the main project, with also \textsf{SPFShared} and \textsf{SPFLib}. In this project all submodules are connected using normal Gradle dependencies.
+I.e. there is a \textsf{settings.gradle} file where are declared all submodules and in every local module's \textsf{build.gradle} are specified the dependencies from other submodules. For example, in Listing \ref{lst:settingsgradle} there is the \textsf{settings.gradle} that I used, and in Listing \ref{lst:buildgradle} the \textsf{build.gradle} of the submodule called \textsf{sPFFramework}.
+
+As you can see there are local module's dependencies like \textsf{gson} and \textsf{support-v4}, a provided dependency like \textsf{lombok} and finally the dependency of \textsf{sPFShared} module. Not online like the others, but locally into the Android Studio Project. In fact, all the dependencies in \textsf{SPFApp} are local because it's the place where you can develop their. In external apps, like \emph{SPFCouponing} and \emph{SPFChat}, all dependencies are remote, using the deployed versions of \textsf{SPFShared} and \textsf{SPFLib}. This is the correct way to manage dependencies for SPF.
+A very big improvement should be the total separation of \textsf{SPFApp} from \textsf{sPFFramework} and all other submodules. But this is another topics and i will show more details and hints at the end of this document, because this should be the main objective for the next major release.
 
 \section{The new project structure}
-After the first overview it's time to explain in detail the new project structure for SPFApp. Like described before, all applications based on SPF should only add the maven dependencies for SPFShared and SPFLib.
+After the first overview, it's time to explain in detail the new project structure for \textsf{SPFApp}. Like described before, all applications based on SPF should only add the maven dependencies for \textsf{SPFShared} and \textsf{SPFLib}.
 
 \section*{sPFApp module}
 
 For main project, the structure is more complicated.
-There is an Android application called SPFApp, that it's the main module, because in its gradle file there is this line: ``apply plugin: 'com.android.application'``.
-In this file i specify some informations, like versionCode and versionName. These two values are important, because when you want to release another version you should increase the versionCode and change the versionNane, for example ``3.0.0`` or ``2.1.0``.
-An important part to mantain updated this application is to force the compileSdkVersion, buildToolsVersion and targetSdkVersion to the latest available values. Also, it's a good practice to always use the latest gradle wrapper, forcing the version into all gradle files n this way:
+There is an Android application called \textsf{SPFApp}, i.e the main module, because in its Gradle file there is this line: ``apply plugin: 'com.android.application'``.
+In this file I specified some informations, like \textsf{versionCode} and \textsf{versionName}. These two values are important, because when you want to release another version, you should increase the first one and change the the second one, for example ``3.0.0" or ``2.1.0".
 
+\begin{lstlisting}[caption={Gradle wapper},label=lst:gradlewrapper, language=Java]
 task wrapper(type: Wrapper) {
     gradleVersion = "2.8"
 }
+\end{lstlisting}
+
+An important part to maintain updated this application is to force the \textsf{compileSdkVersion}, \textsf{buildToolsVersion} and \textsf{targetSdkVersion} to the latest available values. Also, it's a good practice to always use the latest Gradle wrapper, forcing the version into all Gradle files as in Listing \ref{lst:gradlewrapper}.
 
 But, the most important part are the dependencies.
-Inside this block there are all the local dependencies for this module. In particular, for SPFApp, the list is very long, because there are all the library to create the gui, like MaterialDrawer, Iconics, Butterknife, CircleImageView, Soundcloud-crop.
-It's very important to always update this libraries because some of them receive a huge amount of updates with fixes and improvements.
-Also, there other dependencies like Lombok to use annotations like @Getter and @Setter.
-At the moment, Lombok require a config file called lombok.config to be able to build the project.
+Inside this block there are all the local dependencies for this module. In particular, for SPFApp, the list is very long, because there are all the libraries to create the GUI, like \textsf{MaterialDrawer}, \textsf{Iconics}, \textsf{Butterknife}, \textsf{CircleImageView}, \textsf{Soundcloud-crop}, \textsf{AboutLibrary}.
+It's very important to update always this libraries, because some of them receive a huge amount of updates with fixes and improvements. Also, I used other dependencies like Lombok, to use annotations like @Getter and @Setter. At the moment, Lombok require a config file called \textsf{lombok.config} to be able to build the project.
 
-Finally there are all the google dependencies to be able to target different Android versions using the latest gui componenets. Remember to use classes from the support libraries to be able to show the latest and modern gui  elements in all Androids version, when it's possibile. For example use Fragment class from appcompat-v4, or AppCompatActivity and not simply Activity, or Loader and AsyncTaskLoader from appCompatv7 and so on. I you follow this simple suggestions the next updates of this  will be very simple.
+Finally there are all the Google dependencies to be able to target different Android versions using the latest GUI components. You should remember to use classes from the support libraries to be able to show the latest and modern gui  elements in all Androids version, when it's possibile. For example use Fragment class from appcompat-v4, or AppCompatActivity and not simply Activity, or Loader and AsyncTaskLoader from appCompat-v7 and so on. I you follow this simple suggestions the next updates of this  will be very simple.
 Also remember to choose the correct Android Theme in src/res/values/styles.xml, like Theme.AppCompat.Light.NoActionBar. This is absolutely required by Android when you want to use supports libraries.
 
-Finally, to be able to compile with Travis CI, you must provide the correct .travis.yml file specifying exactly the same version written in you gradle files.
-For example, if you are targeting API 23, into your travis file you must write 
-- android-23
+Finally, to be able to compile with Travis CI, you must provide the correct .travis.yml file specifying exactly the same version written in your gradle files. For example, if you are targeting API 23, into your travis file, you must write ``- android-23".
 
-But, where are all the dependencies described here? They are on Maven Central Repository. This means that they are online or local if you have previously downloaded those files.
-The dependencies specified with ``compile project(':moduleName')`` are the local modules into the AndroidStudio Project. Obviously, this means that are local.
+But, where are all the dependencies described here? They are on Maven Central Repository. This means that they are online or local if you have previously downloaded those files. The dependencies specified with \textsf{compile project(':moduleName')} are the modules into the AndroidStudio Project. Obviously, this means that are local.
 
 \section*{sPFFramework and sPFWFDMid modules}
-These are ``com.android.library`` module. For this reason, you can't start they as Android Applications.
-The structure is quite the same, always with remote and local dependencies.
+These are \textsf{com.android.library} module. For this reason, you can't start their as Android Applications. The structure is quite the same, always with remote and local dependencies.
 
 \section*{sPFLib and sPFShared modules}
-These are different modules, because have also ``apply plugin: 'maven'`` to be able to push on a local Maven Server on your PC.
-In my case, I chose \emph{Sonatype Nexus OSS} and i specified inside these two build.gradle files the uploadeArchives task to be able to push on the local server the compiled libraries and to use inside another different Android project that request these files.
-This is very useful during development. In this way you aren't oblied to push all snapshots version into a remove maven repository, but you can test your code locally.
-To be able to use this you must download the server from http://www.sonatype.org/nexus/go/. 
-After tht start the server following the informations on the official websites and you can enter with http://localhost:8081/nexus and login as administrator.
-To be able to push directly to this serve to AndroidStudio the only thing that you must do is:
-create a gradle.properties inside the root project and put this inside:
+These are different modules, because they have also \textsf{apply plugin: 'maven'} to be able to push \textsf{.aar} files on a local Maven server.
+In my case, I chose \emph{Sonatype Nexus OSS} and i specified inside these two \textsf{build.gradle} files the \textsf{uploadeArchives} task to be able to push on the local server the compiled libraries and to use inside another different Android project that request these files.
+This is very useful during development. In this way, you aren't obliged to push all snapshots into a remove maven repository, but you can test your code locally. To be able to use this, you must download the server from \seqsplit{http://www.sonatype.org/nexus/go/}. 
+After that, you can start the server, following the informations on the official websites and you can enter with \seqsplit{http://localhost:8081/nexus} and login as administrator.
 
+\begin{lstlisting}[caption={gradle.properties},label=lst:gradleproperties, language=Java]
 nexusUrl=http://localhost:8081/nexus
 nexusUsername=admin
 nexusPassword=admin123
+\end{lstlisting}
 
-Remember to not push this file remotely, this should be only a local configuration for your machine.
 
-After that, build the entire project and now you are able to upload SPFLib and SPFShared into this server executing from Android Studio the uploadArchives task into these two projects. Remember that at every upload you should increace the version number into the build.gradle or you should remove the folder inside you server.
+To be able to push directly to this server from AndroidStudio, you should create only a \textsf{gradle.properties} inside the root project and write inside the content of the Listing \ref{lst:gradleproperties}. Please, remember to don't push this file remotely, because this should be only a local configuration for your machine.
 
-With this informations you can build SPFApp, but what you should do if you want to build SPF external applications that require SPFShared and SPFLib?
-If you want to use my stable versions, you can simply follow the procedure described at the start of this section, but which is the correct procedure to use the versions from Sonatype Nexus OSS?
-It's very simple, because you should use this main build.gradle file:
+After that, build the entire project and now you are able to upload SPFLib and SPFShared into this server executing from Android Studio the uploadArchives task into these two projects. Remember that at every upload, you should increase the version number into the \textsf{build.gradle} to prevent caching problems.
 
-\begin{lstlisting}
-	
-// Top-level build file
+\begin{lstlisting}[caption={Main build.gradle},label=lst:main-build.gradle]
 buildscript {
   repositories {
-  jcenter()
-  maven {
-    url "http://localhost:8081/nexus/
-    	  content/groups/public"
-  }
+    jcenter()
+    maven {
+      url "http://localhost:8081/nexus/
+      	content/groups/public"
+    }
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:1.3.1'
   }
 }
-
 allprojects {
   repositories {
     jcenter()
     maven {
       url "http://localhost:8081/nexus/
-      		content/groups/public"
+		content/groups/public"
     }
   }
 }
 \end{lstlisting}
 
-Yes, also in this file you should always update the gradle build tools, to be able to use all latest libraries and functions of the IDE (for example in the future Android Data Binding will be relased, and to be able to use this, you will must update the build tools to compile, the same happened some months ago with the NDK support).
+With these informations you can build \textsf{SPFApp}, but what you should do if you want to build SPF applications that need SPFShared and SPFLib?
+If you want to use my stable versions, you can simply follow the procedure described at the start of this section, but which is the correct procedure to use unstable versions from Sonatype Nexus OSS?
+It's very simple, because you can simply use the main \textsf{build.gradle} file in Listing \ref{lst:main-build.gradle}.
 
-After that, you can simply put these dependencies:
+Yes, also in this file you should always update the gradle build tools, to be able to use all latest libraries and functions of the IDE (for example in the future Android Data Binding will be released, and to be able to use this, you'll must update the build tools to compile, the same happened some months ago with the NDK support).
 
+\begin{lstlisting}[caption={Module build.gradle's example},label=lst:module-build.gradle]
 compile 'it.polimi.spf:spflib:2.0.0.0@aar'
 compile 'it.polimi.spf:spfshared:2.0.0.0@aar'
+\end{lstlisting}
 
-
-into your local build.gradle file into your SPF application.
-
-Obviously, to be able to compile, Sonatype Nexus OSS must be running with this files. 
+After that, you can simply put the dependencies in Listing \ref{module-build.gradle} into the local module's \textsf{build.gradle} file. Obviously, to be able to compile, Sonatype Nexus OSS must be running with tese files. 
 
 With all these informations you can simply build all your SPF applications and updates all dependencies and tools to the latest versions.
 
