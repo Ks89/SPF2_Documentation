@@ -2,7 +2,7 @@
 \label{gui}
 
 In this short chapter i'll show the main improvements to the GUI.
-Mainly, I used all available elements into the support library and I replaced the Holo Theme with ``Theme.AppCompat.Light.NoActionBar" to mimic the Material Theme. Also, when necessary, I used the Compat element, like CompatButton and so on to show the same element in different Android's versions. When possibile I replaced unofficial libraries or old component with the new Google Design support library, for example to crete tab layouts. 
+Mainly, I used all available elements into the support library and I replaced the \emph{Holo Theme} with \textsf{Theme.AppCompat.Light.NoActionBar} to mimic the \emph{Material Theme}. Also, when necessary, I used \textsf{Compat} elements, like \textsf{CompatButton} and so on to show the same element in different Android versions. When possibile, I replaced unofficial libraries or old components with newer versions from \emph{Google Design support library}, for example to create tab layouts. 
 
 \begin{figure}[thpb]
 \centering
@@ -21,7 +21,7 @@ Mainly, I used all available elements into the support library and I replaced th
 \end{minipage}	
 \end{figure}	
 
-I applied all this updates to all SPF's apps. Also, I implemented the Material Drawer using a custom unofficial library available on GitHub, created by Mike Penz. The idea was to build a cool Material Drawer very quickly without to implement manually some annoying features. The result is in Figure \ref{fig:drawer}. In addition, I used Iconics library to add vector icons to buttons, toolbar and to the drawer's items, as in Figure \ref{fig:buttom-iconics}.
+I applied all this updates to all SPF's apps. Also, I implemented the \textsf{Material Drawer} using a custom unofficial library available on GitHub, created by Mike Penz. The idea was to build a cool Material Drawer very quickly, without to implement manually some annoying features. The result is in Figure \ref{fig:drawer}. In addition, I used \textsf{Iconics} library to add vector icons to buttons, toolbar and to the drawer's items, as in Figure \ref{fig:buttom-iconics}.
 
 \begin{figure}[thpb]
 \centering
@@ -59,7 +59,7 @@ As you can see, i added a Header with an image and the profile photo (Figure \re
 \end{figure}	
 
 
-After this quick explanation i want to explain one of this features, i.e. the Material Drawer, in particular how to reuse the same Drawer for smartphone and Tablets to create a Multi-pane layout, as in Figure \ref{fig:tablet1}.
+After this quick explanation i want to explain one of this features, i.e. the 	\emph{Material Drawer}, in particular how to reuse the same \emph{Drawer} for smartphone and Tablets to create a Multi-pane layout, as in Figure \ref{fig:tablet1}.
 
 In Listing \ref{lst:multipane} there is a shorter version of the code that I used to create the drawer. All the method's invocations are chained, because every method returns always the same object, DrawerBuilder.
 
@@ -80,7 +80,7 @@ drawerBuilder = new DrawerBuilder()
 \end{lstlisting}
 
 
-And finally, in Listing \ref{lst:multipane} I added the code to reuse the MaterialDrawer to create a Multipane layout. The trick is to the view obtained from the drawer to the viewGroup related to the layout's element, a simple FrameLayout that I called \textsf{nav\_tablet}. Obviously you need two layouts, one for smartphones and one for tablet. In the first case you must use a DrawerLayout, in the second one you could simply use a FrameLayout.
+And finally, in Listing \ref{lst:multipane} I added the code to reuse the \textsf{MaterialDrawer} to create a \emph{Multi-pane layout}. The trick is to add the view obtained from the \textsf{Drawer} to the \textsf{viewGroup} related to the layout's element, a simple \textsf{FrameLayout} that I called \textsf{nav\_tablet}. Obviously. you need two layouts, one for smartphones and one for tablet. In the first case you must use a \textsf{DrawerLayout}, in the second one you could simply use a \textsf{FrameLayout}.
 
 
 \begin{lstlisting}[caption={Reuse Drawer for Multi-pane layout},label=lst:multipane, language=Java]
