@@ -9,60 +9,60 @@ In this section i want to write a list with all major changes made in SPF2 compa
 	\item SPFShared and SPFLib are remote dependencies into a maven repository for external apps, but at the same time they are local projects for SPF.
 	\item created a gradle task to upload dependencies into a Sonatype Nexus Server.
 	\item updated to Lollipop/Marshmallow Material Design using support libraries.
-	\item code cleanup using Butterknife, Otto and Project Lombok. Also, improved architecture removing cyclic dependencies.
-	\item completely removed AllJoyn/AllSeen's middleware. SPF2 has a pure Wi-Fi Direct middleware implementation.
-	\item notification into Notification Drawer updated with a custom layout (using RemoteViews) adding an "X" button to stop the Proximity Service.
-	\item fixed BUG ID=0: crashes related with profile image. Now i'm using android-crop by soundcloud to pick and cut images. Also, I added another library to create circular image view.
-	\item added Travis CI to the github repository.
-	\item fixed BUG ID=2: problem when i'm trying to save profile's fields. I replaced the listener with a \textsf{TextWatcher}.
-	\item fixed BUG ID=9: when CouponClient is closed, SPFFramework receives and saves coupons ignoring my filter. To fix this problem, I changed the filter to use the db, instead of the data saved in memory.
+	\item code cleanup using \emph{Butterknife}, \emph{Otto} and \emph{Project Lombok}. Also, improved architecture removing cyclic dependencies.
+	\item completely removed \emph{AllJoyn/AllSeen}'s middleware. SPF2 has a pure Wi-Fi Direct Middleware implementation.
+	\item notification into \emph{Notification Drawer} updated with a custom layout (using \emph{RemoteViews}) adding an "X" button to stop the \emph{Proximity Service}.
+	\item fixed BUG ID=0: crashes related to profile image. Now I'm using \emph{android-crop} by \emph{soundcloud} to pick and cut images. Also, I added another library to create a \emph{circular image view}.
+	\item added \emph{Travis CI} to the GitHub repository.
+	\item fixed BUG ID=2: problem when I'm trying to save profile's fields. I replaced the listener with a \textsf{TextWatcher}.
+	\item fixed BUG ID=9: when \textsf{SPFCouponingClient} is closed, \textsf{SPFFramework} receives and saves coupons ignoring my filter. To fix this problem, I changed the filter to use the db, instead of the data saved in memory.
 	\item huge code refactoring and design improvements into Wi-Fi Direct Middleware.
-	\item fixed BUG ID=11: null pointer exception in GroupActor.
-	\item implemented a quick workaround to specify go\_intent and autonomous mode from the GUI, using switches.
+	\item fixed BUG ID=11: NullPointerException in \textsf{GroupActor}.
+	\item implemented a quick workaround to specify \emph{go\_intent} and \emph{autonomous mode} from the GUI, using switches.
 	\item fixed BUG ID=12: ``service is null" in middleware.
 	\item performance improvements for group creation's procedure into the middleware.
 	\item fixed Bounjour protocol logic into the middleware.
 	\item added Toast notification to explain the connection status.
-	\item fixed BUG ID=14: null pointer exception (but I don't remember where).
-	\item using the unique identifier I created a quick logic to tell to clients if a device is a GO or not. In fact, now GOs have id that start with the ``AP" prefix.
+	\item fixed BUG ID=14: NullPointerException (but I don't remember where).
+	\item using the unique identifier I created a quick logic to tell to clients if a device is a GO or not. In fact, now GOs have ids that start with the ``AP" prefix.
 	\item fixed BUG ID=15: implemented a logic to connect only to ``AP" devices.
-	\item fixed BUG ID=16: related to ID=15 but isolated into ServiceList class.
-	\item implemented Wi-Fi Direct's Autonomous mode for GOs.
+	\item fixed BUG ID=16: related to ID=15 but isolated into \textsf{ServiceList} class.
+	\item implemented Wi-Fi Direct's \emph{Autonomous Mode} for GOs.
 	\item implemented a new logic to manage in a better way the selection of Socket's ports.
 	\item log system updated and added code to catch all exceptions in the middleware.
 	\item increased connection's timeout on clients to reduce problems during the connection procedure.
-	\item fixed BUG ID=17: in a particular part of the middleware, socket.close() were called by the ui thread causing a catched and ignored exception. Fixed using Otto's events to create asynchronous calls.
+	\item fixed BUG ID=17: in a specific part of the middleware, \textsf{socket.close()} were called by the UI Thread causing a caught and ignored exception. Fixed using \emph{Otto}'s events to create asynchronous calls.
 	\item implemented a complete Event's hierarchy used for Otto bus.
-	\item completely redesigned GroupActor and its subclasses. The superclass is a Thread and all subclasses implement run() and other abstract methods.
-	\item removed ServerSocketAcceptor and moved into GroupOwnerActor.
-	\item removed cyclic dependency between WifiDirectMiddleware and WFDBroadcastReceiver using otto's events.
+	\item completely redesigned \textsf{GroupActor} and its subclasses. The superclass is a Thread and all subclasses implement \textsf{run()} and other abstract methods.
+	\item removed \textsf{ServerSocketAcceptor} and moved into \textsf{GroupOwnerActor}.
+	\item removed cyclic dependency between \textsf{WifiDirectMiddleware} and \textsf{WFDBroadcastReceiver} using \emph{Otto}'s events.
 	\item implemented Wi-Fi Direct Group's management into Wi-Fi Direct middleware (not really stable, but the problem is related to the Android's implementation of this protocol).
 	\item fixed BUG ID 18: Android 6.0 Marshmallow changed the permission policy. For this reason, I implemented a workaround to guide the user to enable a specific feature, required by external apps to interact with the framework.
-	\item SPFApp updated with the new Google Design library, for example to create Tabs.
+	\item \textsf{SPFApp} updated with the new Google Design library, for example to create Tabs.
 	\item fixed BUG ID=20: added a default photo profile.
 	\item fixed BUG ID=21: fixed small bug related to tabs.
-	\item implemented Eternal Connect in a singleton class. It's an evolution of the Eternal Discovery that I previously created for Pigeon Messenger (\seqsplit{https://github.com/deib-polimi/PigeonMessanger}). Eternal Connect is able to discovery and connect automatically to nearby devices.
-	\item added two new fragments: GO Infos and About. The first shows all informations about services and connection status, the second one is an about page.
-	\item completely rewritten the navigation drawer using MaterialDrawer and Iconics to create a modern GUI. Also, I reused the same code to update the Multi-pane layout for tablets.
+	\item implemented \textsf{Eternal Connect} in a singleton class. It's an evolution of the \textsf{Eternal Discovery} that I previously created for \emph{Pigeon Messenger} (\seqsplit{https://github.com/deib-polimi/PigeonMessanger}). \textsf{Eternal Connect} is able to discovery and connect automatically to nearby devices.
+	\item added two new fragments: \textsf{GO Infos} and \textsf{About}. The first shows all informations about services and connection status, the second one is an about page.
+	\item completely rewritten the navigation drawer using \textsf{MaterialDrawer} and \textsf{Iconics} to create a modern GUI. Also, I reused the same code to update the \emph{Multi-pane layout} for tablets.
 \end{enumerate}
 
 \subsection*{Changelog SPFCouponingProviderDemo}
 \begin{enumerate}
 	\item moved outside the main repository with the framework.
 	\item updated to Lollipop/Marshmallow Material Design using support libraries.
-	\item fixed BUG ID=3: crashes related with profile image. Now i'm using android-crop by soundcloud to pick and cut images. Also, I added another library to create circular image view.	
-	\item added Travis CI to the GitHub repository.
+	\item fixed BUG ID=3: crashes related with profile image. Now i'm using \emph{android-crop} by \emph{soundcloud} to pick and cut images. Also, I added another library to create \emph{circular image view}.	
+	\item added \emph{Travis CI} to the GitHub repository.
 \end{enumerate}
 
 \subsection*{Changelog SPFCouponingClientDemo}
 \begin{enumerate}
 	\item moved outside the main repository with the framework.
 	\item updated to Lollipop/Marshmallow Material Design using support libraries.
-	\item fixed BUG ID=3: crashes related with profile image. Now i'm using android-crop by soundcloud to pick and cut images. Also, I added another library to create circular image view.	
-	\item added Travis CI to the GitHub repository.
+	\item fixed BUG ID=3: crashes related with profile image. Now i'm using \emph{android-crop} by \emph{soundcloud} to pick and cut images. Also, I added another library to create \emph{circular image view}.	
+	\item added \emph{Travis CI} to the GitHub repository.
 	\item fixed BUG ID=4: coupons received multiple times, adding multiple times the same element to the list.
-	\item fixed BUG ID=5: added a method to delete ``interests" in SPFApp directly from Couponing app recycling existing methods.
-	\item fixed BUG ID=6: CouponCreationActivity has leaked ServiceConnection.
+	\item fixed BUG ID=5: added a method to delete ``interests" in \textsf{SPFApp} directly from Couponing app recycling existing methods.
+	\item fixed BUG ID=6: \textsf{CouponCreationActivity} has leaked \textsf{ServiceConnection}.
 	\item fixed BUG ID=7: app crashes when i'm trying to add categories.
 \end{enumerate}
 
@@ -70,5 +70,5 @@ In this section i want to write a list with all major changes made in SPF2 compa
 \begin{enumerate}
 	\item moved outside the main repository with the framework.
 	\item updated to Lollipop/Marshmallow Material Design using support libraries.	
-	\item added Travis CI to the GitHub repository.
+	\item added \emph{Travis CI} to the GitHub repository.
 \end{enumerate}

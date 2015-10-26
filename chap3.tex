@@ -1,7 +1,7 @@
 \chapter{New Material Design GUI}
 \label{gui}
 
-In this short chapter i'll show the main improvements to the GUI.
+In this short chapter I'll show the main improvements to the GUI.
 Mainly, I used all available elements into the support library and I replaced the \emph{Holo Theme} with \textsf{Theme.AppCompat.Light.NoActionBar} to mimic the \emph{Material Theme}. Also, when necessary, I used \textsf{Compat} elements, like \textsf{CompatButton} and so on to show the same element in different Android versions. When possibile, I replaced unofficial libraries or old components with newer versions from \emph{Google Design support library}, for example to create tab layouts. 
 
 \begin{figure}[thpb]
@@ -21,7 +21,7 @@ Mainly, I used all available elements into the support library and I replaced th
 \end{minipage}	
 \end{figure}	
 
-I applied all this updates to all SPF's apps. Also, I implemented the \textsf{Material Drawer} using a custom unofficial library available on GitHub, created by Mike Penz. The idea was to build a cool Material Drawer very quickly, without to implement manually some annoying features. The result is in Figure \ref{fig:drawer}. In addition, I used \textsf{Iconics} library to add vector icons to buttons, toolbar and to the drawer's items, as in Figure \ref{fig:buttom-iconics}.
+I applied all these updates to all SPF's apps. Also, I implemented the \textsf{Material Drawer} using a custom unofficial library available on GitHub, created by Mike Penz. The idea was to build a cool Material Drawer very quickly, without to implement manually some annoying features. The result is in Figure \ref{fig:drawer}. In addition, I used \textsf{Iconics} library to add vector icons to buttons, toolbar and to the drawer's items, as in Figure \ref{fig:buttom-iconics}.
 
 \begin{figure}[thpb]
 \centering
@@ -49,7 +49,7 @@ I applied all this updates to all SPF's apps. Also, I implemented the \textsf{Ma
 \end{figure}	
 
 
-As you can see, i added a Header with an image and the profile photo (Figure \ref{fig:header}) and a Sticky Footer into the drawer, with switches (Figure \ref{fig:switches}). Also, I added two new items: Group Infos and About. The first one selects a fragment with the available services and the connected devices. This is not necessary to users, but it very useful during development to understand if a device is still connected or if there are problems related to Wi-Fi Direct. The second one is a simple about page of SPF, created with a library that compose this Activity scanning the libraries and dependencies used inside this application, automatically, as in Figure \ref{fig:about}.
+As you can see, i added a \emph{Header} with an image and the profile photo (Figure \ref{fig:header}) and a \emph{Sticky Footer} into the \emph{Drawer}, with switches (Figure \ref{fig:switches}). Also, I added two new items: \textsf{Group Infos} and \textsf{About}. The first one selects a fragment with the available services and the connected devices. This is not necessary to users, but it very useful during development to understand if a device is still connected or if there are problems related to Wi-Fi Direct. The second one is a simple about page of SPF, created with a library that compose this Activity scanning the libraries and dependencies used inside this application, as in Figure \ref{fig:about}.
 
 \begin{figure}[thpb]
 	\centering
@@ -59,9 +59,9 @@ As you can see, i added a Header with an image and the profile photo (Figure \re
 \end{figure}	
 
 
-After this quick explanation i want to explain one of this features, i.e. the 	\emph{Material Drawer}, in particular how to reuse the same \emph{Drawer} for smartphone and Tablets to create a Multi-pane layout, as in Figure \ref{fig:tablet1}.
+After this quick explanation, I want to explain one of these features, the 	\emph{Material Drawer}. In particular, I want to show how to reuse the same \emph{Drawer} for smartphones and tablets to create a \emph{Multi-pane layout}, as in Figure \ref{fig:tablet1}.
 
-In Listing \ref{lst:multipane} there is a shorter version of the code that I used to create the drawer. All the method's invocations are chained, because every method returns always the same object, DrawerBuilder.
+In Listing \ref{lst:multipane} there is a shorter version of the code that I used to create the drawer. All the method's invocations are chained, because every method returns the same object, a \textsf{DrawerBuilder}'s instance.
 
 
 \begin{lstlisting}[caption={DrawerBuilder creations},label=lst:drawerbuilder, language=Java]
@@ -80,7 +80,7 @@ drawerBuilder = new DrawerBuilder()
 \end{lstlisting}
 
 
-And finally, in Listing \ref{lst:multipane} I added the code to reuse the \textsf{MaterialDrawer} to create a \emph{Multi-pane layout}. The trick is to add the view obtained from the \textsf{Drawer} to the \textsf{viewGroup} related to the layout's element, a simple \textsf{FrameLayout} that I called \textsf{nav\_tablet}. Obviously. you need two layouts, one for smartphones and one for tablet. In the first case you must use a \textsf{DrawerLayout}, in the second one you could simply use a \textsf{FrameLayout}.
+And finally, in Listing \ref{lst:multipane}, I added the code to reuse the \textsf{MaterialDrawer} to create a \emph{Multi-pane layout}. The trick is to add the view obtained from the \textsf{Drawer} to the \textsf{viewGroup} related to the layout's element, a simple \textsf{FrameLayout} that I called \textsf{nav\_tablet}. Obviously, you need two layouts, one for smartphones and one for tablet. In the first case you must use a \textsf{DrawerLayout}, in the second one you could simply use a \textsf{FrameLayout}.
 
 
 \begin{lstlisting}[caption={Reuse Drawer for Multi-pane layout},label=lst:multipane, language=Java]
