@@ -9,4 +9,24 @@ Also, the first implementation of SPF completely ignored the different roles of 
 
 I repeat, the main focus for the next versions should be the extraction of \textsf{SPFApp} from the main project, creating a standalone project with remote calls to the previous one.
 
-Obviously, there are other open issues. The complete list is available into the \textsf{README.md} on the official GitHub page.
+
+
+\section*{Open issues}
+Obviously, there are other open issues. I decided to write all known problems here.
+\begin{enumerate}
+	\item If discovery phase fails, create a temporized system to restart it automatically.
+	\item When SPF enters in \textsf{onConnectionInfoAvailable()}, start a timer on the client. At the end of the countdown, if this device isn't connected to the GO it should restart the discovery phase.
+	\item Refactor \textsf{MainActivity.java} to reduce codelines.
+	\item Updates the proximity switch in the GUI accordingly to the service status. For example, when Eternal Connect is working, you should update the switch. I suggest to use \emph{Broadcast receivers} (not Local, but remote declared into the \textsf{AndroidManifest.xml}). Use \textsf{GroupInfosFragment} as an example.
+	\item Remove all \emph{ListViews} and replace they with \emph{RecyclerView}. Use \textsf{GroupInfosFragment} as an example.
+	\item Fix Tab positioning for tablets/smartphones. You should find a way to display centered tabs that fill the entire screen width, but with text on a single line.
+	\item Improve the \emph{standard mode} into the Wi-Fi Direct Middleware.
+	\item Replace \emph{materialtabstrip library} with the official version included into \emph{Design support library} by Google, either for \textsf{CouponingProvider} or \textsf{CouponingClient}.
+	\item Replace \emph{multiselection library} in \textsf{CouponingProvider} and \textsf{CouponingClient} with an official version.
+	\item Update the \emph{profile identifier} accordingly to the device role into the network (GO or Client). Remember that I'm using the ``AP" prefix to identify GOs.
+	\item Check if Wi-Fi is enabled during start-up.
+	\item Rewrite the entire \textsf{ProfileFragment} GUI using \emph{RecyclerView} an statical xml's layout to simplify the code.
+\end{enumerate}
+
+
+

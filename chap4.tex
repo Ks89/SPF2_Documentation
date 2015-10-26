@@ -1,13 +1,13 @@
 \chapter{Changelog}
 \label{changelog}
 
-In this section i want to write a list with all major changes made in SPF2 compared to SPF1. This can be considered as a complete changelog of SPF2 and its demo applications.
+In this section I want to write a list with all major changes made in SPF2 compared to SPF1. This can be considered as a complete changelog of SPF2 and its demo applications.
 
 \subsection*{Changelog SPF}
 \begin{enumerate}
 	\item project moved from Eclipse to Android Studio.
 	\item SPFShared and SPFLib are remote dependencies into a maven repository for external apps, but at the same time they are local projects for SPF.
-	\item created a gradle task to upload dependencies into a Sonatype Nexus Server.
+	\item created a Gradle task to upload dependencies into a Sonatype Nexus Server.
 	\item updated to Lollipop/Marshmallow Material Design using support libraries.
 	\item code cleanup using \emph{Butterknife}, \emph{Otto} and \emph{Project Lombok}. Also, improved architecture removing cyclic dependencies.
 	\item completely removed \emph{AllJoyn/AllSeen}'s middleware. SPF2 has a pure Wi-Fi Direct Middleware implementation.
@@ -44,6 +44,8 @@ In this section i want to write a list with all major changes made in SPF2 compa
 	\item implemented \textsf{Eternal Connect} in a singleton class. It's an evolution of the \textsf{Eternal Discovery} that I previously created for \emph{Pigeon Messenger} (\seqsplit{https://github.com/deib-polimi/PigeonMessanger}). \textsf{Eternal Connect} is able to discovery and connect automatically to nearby devices.
 	\item added two new fragments: \textsf{GO Infos} and \textsf{About}. The first shows all informations about services and connection status, the second one is an about page.
 	\item completely rewritten the navigation drawer using \textsf{MaterialDrawer} and \textsf{Iconics} to create a modern GUI. Also, I reused the same code to update the \emph{Multi-pane layout} for tablets.
+	\item added two \emph{Broadcast receivers} to update the GUI with available services and devices.
+	\item created a new app icon in Material Design.
 \end{enumerate}
 
 \subsection*{Changelog SPFCouponingProviderDemo}
@@ -52,6 +54,7 @@ In this section i want to write a list with all major changes made in SPF2 compa
 	\item updated to Lollipop/Marshmallow Material Design using support libraries.
 	\item fixed BUG ID=3: crashes related with profile image. Now i'm using \emph{android-crop} by \emph{soundcloud} to pick and cut images. Also, I added another library to create \emph{circular image view}.	
 	\item added \emph{Travis CI} to the GitHub repository.
+	\item created a new app icon in Material Design.
 \end{enumerate}
 
 \subsection*{Changelog SPFCouponingClientDemo}
@@ -64,6 +67,7 @@ In this section i want to write a list with all major changes made in SPF2 compa
 	\item fixed BUG ID=5: added a method to delete ``interests" in \textsf{SPFApp} directly from Couponing app recycling existing methods.
 	\item fixed BUG ID=6: \textsf{CouponCreationActivity} has leaked \textsf{ServiceConnection}.
 	\item fixed BUG ID=7: app crashes when i'm trying to add categories.
+	\item created a new app icon in Material Design.
 \end{enumerate}
 
 \subsection*{Changelog SPFChatDemo}
