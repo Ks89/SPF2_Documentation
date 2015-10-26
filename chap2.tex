@@ -79,7 +79,7 @@ This means that, WifiDirectMiddleware.java posts a GoConnectActionEvent and Grou
 	\label{uml-part0-3}
 \end{figure}	
 
-I don't want to explain in details the code of this middleware, instead, I want to examplain the structure and the interactions of the classes inside the wfd/groups package.
+I don't want to explain in details the code of this middleware, instead, I want to explain the structure and the interactions of the classes inside the wfd/groups package.
 I created two different scheme to describe this. They are represented as state diagram because very simple to read, but probably the best type of uml could be the Sequence Digram.
 First, I want to describe how GroupActor and its subclasses post events. As you can see in Figure \ref{uml-part0-2}, when GroupOwnerActor start, it will create a ServerSockets, nothing more.
 It will be SPF that with the connect method will starts the GroupOwnerActor's thread executing the run() method. Inside of them, it will start to listen and accapt clients connections. If everything will be ok, it will post a GoInternalClientEvent on the bus, instead a GoErrorEvent. In the first case, it will return to listen and accepts other clients, that to the while's cycle. Obviously this is only an extreme abstraction. To understand more in detail this, look the Figure \ref{uml-part0-3} where I represented the sequence of operations that starts when GroupOwnerActor receives the GoInternalClientEvent postes by itself (from is run() method and for this reason from another thread).
