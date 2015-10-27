@@ -2,7 +2,7 @@
 \label{chap2}
 \thispagestyle{empty}
 
-\noindent In this section, I'll show the low-level architecture of the \textsf{sPFWFDMid} module. With this section you'll able to update the middleware in the future. In SPF2, I completely changed most of the code in this module. For this reason, you should consider completely deprecated this module from SPF1 and the related documentation.
+\noindent In this chapter, I'll show the low-level architecture of the \textsf{sPFWFDMid} module. In SPF2, I completely changed most of the code in this module. For this reason, you should consider completely deprecated this module from SPF1 and the related documentation.
 
 \section{A quick overview}
 
@@ -29,16 +29,16 @@ The first thing that \textsf{SPFApp} does is inside its Application's class, whe
 	\label{uml-part0-1}
 \end{figure}	
 
-After that, as you can see in Figure \ref{uml-part0-1}, \textsf{WFDMiddlewareAdapter} (the most important class included into the \textsf{wpdadapter}'s package of the middleware) will be created and automatically it will instantiate the \textsf{WifiDirectMiddleware} object (the most important class included into the \textsf{wfd}'s package of the middleware). This process completes only with the creation of this last object, because the real initialization process and connection are made by SPF using the \textsf{ProximityMiddleware} interface. I'll discuss more in details these aspects during this section.
+After that, as you can see in Figure \ref{uml-part0-1}, \textsf{WFDMiddlewareAdapter} (the most important class included into the \textsf{wpdadapter}'s package of the middleware) will be created and automatically it will instantiate the \textsf{WifiDirectMiddleware} object (the most important class included into the \textsf{wfd}'s package of the middleware). This process completes only with the creation of this last object, because the real initialization process and connection are made by SPF using the \textsf{ProximityMiddleware} interface. I'll discuss more in details these aspects during this document.
 At the moment, i want to explain only the events used to send messages into the middleware. The main idea was to prevent most of the cyclic dependencies that Wi-Fi Direct APIs force to use. To do that, I used a library called \emph{Otto}. 
 \emph{Otto} is an event bus designed to decouple different parts of your application while still allowing them to communicate efficiently. Forked from \emph{Guava}, \emph{Otto} adds unique functionality to an already refined event bus as well as specializing it to the Android platform.
-To be able to post events in all Threads, I used a wrapper called \textsf{Ninebus}. But, the only difficulty to use this library is how maintain an ordered structure. 
+To be able to post events in all Threads, I used a wrapper called \textsf{Ninebus}. But, the only difficulty to use \emph{Otto} is how maintain an ordered structure. 
 
 \begin{figure}[thpb]
 	\centering
 	\includegraphics[scale=0.7]{./images/chap2/event-hyerarchy.png}
-	\caption{Uml part 0.}
-	\label{event-hyeranchy}
+	\caption{Enter hierarchy}
+	\label{event-hieranchy}
 \end{figure}	
 
 \begin{figure}[thpb]
@@ -48,7 +48,7 @@ To be able to post events in all Threads, I used a wrapper called \textsf{Ninebu
 	\label{event-subscribe-post}
 \end{figure}	
 
-To achieve this, I used a package with all events inside, organized using the Java hierarchy. The complete class diagram of all events is in Figure \ref{event-hyeranchy}.
+To achieve this, I used a package with all events inside, organized using the Java hierarchy. The complete class diagram of all events is in Figure \ref{event-hieranchy}.
 Another important thing is to understand which class posts an event and which will reacts to it. To explain in a very simple way this fact, I created the diagram in Figure \ref{event-subscribe-post}. As you can see:
 \begin{itemize}
 	\item the blue elements are the classes the post events;
@@ -56,7 +56,7 @@ Another important thing is to understand which class posts an event and which wi
 	\item in orange are represented all subscribers.
 \end{itemize}
 
-This means for example, that \textsf{WifiDirectMiddleware.java} posts a \textsf{GoConnectActionEvent} and \textsf{GroupActor} will catch the events and it will react to its, executing a method annotated with \textsf{@Subscribe}.
+This means, for example, that \textsf{WifiDirectMiddleware.java} posts a \textsf{GoConnectActionEvent} and \textsf{GroupActor} will catch the events and it will react to its, executing a method annotated with \textsf{@Subscribe}.
 
 \section{Architecture}
 
@@ -106,7 +106,7 @@ I implemented a quick workaround to achieve this, by passing variables during th
 
 \section{Eternal Connect}
 
-\emph{Eternal Connect} is a solution to restart discovery and connect phases after any network errors. This can be considered an improved version of the 	\emph{Eternal Discovery} that I used in \seqsplit{https://github.com/deib-polimi/PigeonMessanger}, because with this latest implementation, SPF will re-connect automatically trying every 15 second for 4 times. Obviously, you can configure this to achieve the best performances. Also, you can improve \emph{Eternal Connect} in different ways to obtain also better performances during network creation, in particular on the Group Owner in Autonomous mode. All the code related to \emph{Eternal Connect} is into a single class called \textsf{EternalConnect.java}.
+\emph{Eternal Connect} is a solution to restart discovery and connect phases after any network errors. This can be considered an improved version of the 	\emph{Eternal Discovery} that I used in \seqsplit{https://github.com/deib-polimi/PigeonMessanger}, because with this latest implementation, SPF will re-connect automatically trying every 15 second for 4 times. Obviously, you can configure this to achieve the best performances. Also, you can improve \emph{Eternal Connect} in different ways to obtain better performances during network's creation, in particular on the Group Owner in Autonomous mode. All the code related to \emph{Eternal Connect} is into a single class called \textsf{EternalConnect.java}.
 \emph{Eternal Connect} has two different modes:
 \begin{enumerate}
 	\item standard: with automatic reconnection in a loop cycle for 4 times every 15 seconds.
@@ -162,7 +162,7 @@ In this section i want to create a list with some of the known issues of Wi-Fi D
 	\item There are random errors when you are trying to establish a connection. In most of the cases, to fix this problem you must kill the Wi-Fi Connection manually.
 	\item The discovery procedure is absolutely unreliable. Sometime a device can't discover other devices without any reason and the only way to fix this problem is a stop, followed by a restart of the discovery procedure.
 	\item Connection between different devices with different Android versions and manufacturers can be unstable.
-	\item The most important problem in SPF2 is related to autonomous group join operation. Because, if a device want to join to a previously created group, it should ask to the GO the ``permission". In Android API there isn't a \textsf{join()} method (in wpa\_supplicant yes, obviously), but there is the standard \textsf{connect()} method. This is not a big problem, instead the real problem is that if a device want to join, on the GO will appear a popup. If the GO accept the join procedure, the connection can be completed. This process can't be automated and requires always the user's interaction. Also, for absolutely inexplicable reasons, when the connection with a third device starts, the entire group can be destroyed to try to recreate it quickly. This is a famous problem that you can found everywhere on \emph{stackoverflow}. At the moment there aren't any solutions. If you want to use wpa\_supplicant from command line, this problem never happens, this implies that is caused by the Android implementation of Wi-Fi Direct. Also, the main consequence related to this problem is that sometime the group won't be recreated, caused by problems during connection or discovery phases. To be able to create a group of three devices with SPF2, you should try some times to obtain the desired result. This is a huge Android's implementation issue, impossibile to fix, at the moment.
+	\item The most important problem in SPF2 is related to autonomous group \emph{join} operation. Because, if a device want to \emph{join} to a previously created group, it should ask to the GO the ``permission". In Android API there isn't a \textsf{join()} method (in \emph{wpa\_supplicant} yes, obviously), but there is the standard \textsf{connect()} method. This is not a big problem, instead the real problem is that if a device want to \emph{join}, on the GO will appear a popup. If the GO accepts the \emph{join} procedure, the connection can be completed. This process can't be automated and requires always the user's interaction. Also, for absolutely inexplicable reasons, when the connection with a third device starts, the entire group can be destroyed to try to recreate it quickly. This is a famous problem that you can found everywhere on \emph{stackoverflow}. At the moment there aren't any solutions. If you want to use \emph{wpa\_supplicant} from command line, this problem never happens, this implies that is caused by the Android implementation of Wi-Fi Direct. Also, the main consequence related to this problem is that sometime the group won't be recreated, caused by problems during connection or discovery phases. To be able to create a group of three devices with SPF2, you should try many times to obtain the desired result. This is a huge Android's implementation issue, impossibile to fix, at the moment.
 \end{itemize}
 
 
