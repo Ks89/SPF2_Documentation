@@ -17,7 +17,7 @@ Obviously, there are other open issues. I decided to write all known problems an
 	\item If discovery phase fails, create a temporized system to restart it automatically.
 	\item When SPF enters in \textsf{onConnectionInfoAvailable()}, start a timer on the client. At the end of the countdown, if this device isn't connected to the GO it should restart the discovery phase.
 	\item Refactor \textsf{MainActivity.java} to reduce codelines.
-	\item Updates the proximity switch in the GUI accordingly to the service status. For example, when Eternal Connect is working, you should update the switch. I suggest to use \emph{Broadcast receivers} (not \emph{Local}, but \emph{Remote] declared into the \textsf{AndroidManifest.xml}). Use \textsf{GroupInfosFragment} as an example.
+	\item Updates the proximity switch in the GUI accordingly to the service status. For example, when Eternal Connect is working, you should update the switch. I suggest to use \emph{Broadcast receivers} (not \emph{Local}, but \emph{Remote} declared into the \textsf{AndroidManifest.xml}). Use \textsf{GroupInfosFragment} as an example.
 	\item Remove all \emph{ListViews} and replace they with \emph{RecyclerView}. Use \textsf{GroupInfosFragment} as an example.
 	\item Fix Tab positioning for tablets/smartphones. You should find a way to display centered tabs that fill the entire screen width, but with text on a single line. Your solution should work also during screen rotation.
 	\item Improve the \emph{standard mode} into the Wi-Fi Direct Middleware.
@@ -27,6 +27,3 @@ Obviously, there are other open issues. I decided to write all known problems an
 	\item Check if Wi-Fi is enabled during start-up.
 	\item Rewrite the entire \textsf{ProfileFragment} GUI using \emph{RecyclerView} and statical xml's layout to simplify the code.
 \end{enumerate}
-
-
-
